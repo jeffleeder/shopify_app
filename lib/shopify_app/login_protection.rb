@@ -65,49 +65,22 @@ module ShopifyApp
 
     def redirection_javascript(url)
       %(     
-	    var loadScript = function(url, callback){
+	      	  // If the current window is the 'parent', change the URL by setting location.href
+              if (window.top == window.self) {
+                window.top.location.href = #{url.to_json};
 
-		var script = document.createElement('script')
-		script.type = 'text/javascript';
-	 
-	    if (script.readyState){  //IE
-	        script.onreadystatechange = function(){
-	            if (script.readyState == 'loaded' ||
-	                    script.readyState == 'complete'){
-	                script.onreadystatechange = null;
-	                callback();
-	            }
-	        };
-	    } else {  //Others
-	        script.onload = function(){
-	            callback();
-	        };
-	    }
-	 
-	    script.src = url;
-	    document.getElementsByTagName('head')[0].appendChild(script);
-	};
-	
-			// if u need to order print out array, sort array use arry to fill out the jquery
-			var myAppJavaScript = function($){
-			// If the current window is the 'parent', change the URL by setting location.href
-		  if (window.top == window.self) {
-		    window.top.location.href = #{url.to_json};
-		
-		  // If the current window is the 'child', change the parent's URL with postMessage
-		  } else {
-		    normalizedLink = document.createElement('a');
-		    normalizedLink.href = #{url.to_json};
-		
-		    data = JSON.stringify({
-		      message: 'Shopify.API.remoteRedirect',
-		      data: { location: normalizedLink.href }
-		    });
-		    window.parent.postMessage(data, "https://#{sanitized_shop_name}");
-		  }
-		
-      
-	};)
+              // If the current window is the 'child', change the parent's URL with postMessage
+              } else {
+                normalizedLink = document.createElement('a');
+                normalizedLink.href = #{url.to_json};
+
+                data = JSON.stringify({
+                  message: 'Shopify.API.remoteRedirect',
+                  data: { location: normalizedLink.href }
+                });
+                window.parent.postMessage(data, "https://#{sanitized_shop_name}");
+              }
+      )
     end
 
     def sanitized_shop_name
