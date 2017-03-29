@@ -64,8 +64,16 @@ module ShopifyApp
     end
 
     def redirection_javascript(url)
-      %(     
-	      	  // If the current window is the 'parent', change the URL by setting location.href
+      %(
+        <!DOCTYPE html>
+        <html lang="en">
+          <head>
+            <meta charset="utf-8" />
+            <base target="_top">
+            <title>Redirecting…</title>
+            <script type="text/javascript">
+
+              // If the current window is the 'parent', change the URL by setting location.href
               if (window.top == window.self) {
                 window.top.location.href = #{url.to_json};
 
@@ -80,6 +88,12 @@ module ShopifyApp
                 });
                 window.parent.postMessage(data, "https://#{sanitized_shop_name}");
               }
+
+            </script>
+          </head>
+          <body>
+          </body>
+        </html>
       )
     end
 
