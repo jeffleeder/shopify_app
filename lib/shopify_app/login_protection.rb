@@ -64,8 +64,7 @@ module ShopifyApp
     end
 
     def redirection_javascript(url)
-      %(
-        <!DOCTYPE html>
+      %(<!DOCTYPE html>
         <html lang="en">
           <head>
             <meta charset="utf-8" />
@@ -93,8 +92,7 @@ module ShopifyApp
           </head>
           <body>
           </body>
-        </html>
-      )
+        </html>)
     end
 
     def sanitized_shop_name
