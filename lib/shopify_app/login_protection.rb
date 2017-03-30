@@ -57,7 +57,7 @@ module ShopifyApp
 
     def fullpage_redirect_to(url)
       if ShopifyApp.configuration.embedded_app?
-        render inline: redirection_javascript(url)
+        render inline: redirection_javascript(url), :content_type => 'text/html'
       else
         redirect_to url
       end
